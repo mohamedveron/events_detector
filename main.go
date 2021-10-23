@@ -15,7 +15,7 @@ func main() {
 
 	server := api.NewServer(serviceLayer)
 
-	http.HandleFunc("/hello", server.GetAirports)
+	http.HandleFunc("/hello", server.AddEvent)
 
 	fmt.Println("server starting on port 9090...")
 

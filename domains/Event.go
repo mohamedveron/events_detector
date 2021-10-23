@@ -2,25 +2,16 @@ package domains
 
 // Event type
 type Event struct {
-	WebsiteUrl string `json:"websiteUrl"`
-	SessionId       string `json:"sessionId"`
-	FormCompletionTime   int  `json:"formCompletionTime"`
-	Longitude   float64  `json:"longitude_deg"`
-	Address string
-	CopyAndPaste       map[string]bool `json:"longitude_deg"`
-}
-
-type Data struct {
-	WebsiteUrl         string
-	SessionId          string
-	ResizeFrom         Dimension
-	ResizeTo           Dimension
-	CopyAndPaste       map[string]bool // map[fieldId]true
-	FormCompletionTime int // Seconds
+	WebsiteUrl			string			`json:"websiteUrl"`
+	SessionId			string 			`json:"sessionId"`
+	FormCompletionTime  int  			`json:"formCompletionTime"`
+	CopyAndPaste       	map[string]bool `json:"longitude_deg"`
+	ResizeFrom			Dimension  		`json:"resizeFrom"`
+	ResizeTo			Dimension  		`json:"resizeTo"`
 }
 
 type Dimension struct {
-	Width  string
-	Height string
+	Width  string	`json:"width"`
+	Height string	`json:"height"`
 }
 

@@ -41,25 +41,23 @@
 </head>
 <body>
 
-
-
 <div class="container">
 
-    <form class="form-details" method="post">
+    <form id="form" class="form-details" method="post">
 
         <h2 class="form-details-heading">Details</h2>
 
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" id="inputEmail" class="form-control"
-               placeholder="Email address" required autofocus>
+               placeholder="Email address" onKeyUp="setStartTimestamp()" onpaste="copyPasteTrigger('inputEmail')" required autofocus>
 
         <label for="inputCardNumber" class="sr-only">Card Number</label>
         <input type="text" id="inputCardNumber" class="form-control"
-               placeholder="Card Number" required>
+               placeholder="Card Number" onKeyUp="setStartTimestamp()" onpaste="copyPasteTrigger('inputCardNumber')" required>
 
         <label for="inputCVV" class="sr-only">CVV</label>
         <input type="text" id="inputCVV" class="form-control"
-               placeholder="Security Code" required>
+               placeholder="Security Code" onKeyUp="setStartTimestamp()" onpaste="copyPasteTrigger('inputCVV')" required>
 
         <div class="checkbox">
             <label>
@@ -73,4 +71,57 @@
 </div> <!-- /container -->
 
 </body>
+
+<script>
+
+    const websiteUrl = window.location.href;
+    console.log(websiteUrl);
+
+    function makeid(length) {
+        let result           = '';
+        let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let charactersLength = characters.length;
+        for ( let i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() *
+                charactersLength));
+        }
+        return result;
+    }
+
+    const sessionId = makeid(8);
+
+
+    function copyPasteTrigger(formId) {
+        console.log("Sending copy paste event");
+
+        const payload = {
+            "eventType": "copyAndPaste",
+            "websiteUrl": websiteUrl,
+            "sessionId": sessionId,
+            "formId": formId,
+            "pasted": true
+        }
+
+        sendRequest(payload);
+    }
+
+    /*
+        * helper method send
+        */
+    function sendRequest(payload) {
+
+        const stringPayload = JSON.stringify(payload);
+        const url = "/hello"
+        fetch(url, {
+            method: 'post',
+            body: stringPayload,
+        }).then(response => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+        }).catch(error => {
+            console.log(error);
+        });
+    }
+</script>
 </html>

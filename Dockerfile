@@ -18,8 +18,6 @@ COPY . .
 
 RUN make all
 
-COPY airports.csv .
-
 # Export necessary port
 EXPOSE 9090
 # Command to run when starting the container

@@ -4,8 +4,15 @@ import (
 	"fmt"
 	"github.com/mohamedveron/events_detector/api"
 	"github.com/mohamedveron/events_detector/service"
+	"html/template"
 	"net/http"
 )
+
+var tmpl *template.Template
+
+func init() {
+	tmpl = template.Must(template.ParseFiles("index.html"))
+}
 
 func main() {
 
@@ -15,6 +22,7 @@ func main() {
 
 	server := api.NewServer(serviceLayer)
 
+	http.HandleFunc("/", foo)
 	http.HandleFunc("/hello", server.AddEvent)
 
 	fmt.Println("server starting on port 9090...")
@@ -22,5 +30,10 @@ func main() {
 	if err := http.ListenAndServe(":9090", nil); err != nil && err != http.ErrServerClosed {
 		fmt.Println("server failed to start", "error", err)
 	}
+
+}
+
+func foo(reswt http.ResponseWriter, req *http.Request) {
+	tmpl.ExecuteTemplate(reswt, "index.html", nil)
 
 }

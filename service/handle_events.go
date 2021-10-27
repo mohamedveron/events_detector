@@ -79,3 +79,42 @@ func (s *Service)  HandleFormSubmissionEvent(e domains.EventRequest) (domains.Ev
 
 	return s.Events[e.SessionId], nil
 }
+
+func (s *Service)  HandleScreenResizeEvent(e domains.EventRequest) (domains.Event,error){
+
+	// check if the struct is already constructed
+	if _, ok := s.Events[e.SessionId]; ok {
+
+		s.mutex.Lock()
+
+		event := s.Events[e.SessionId]
+		event.ResizeFrom = e.ResizeFrom
+		event.ResizeTo 	= e.ResizeTo
+		s.Events[e.SessionId] = event
+
+		s.mutex.Unlock()
+	}else{
+
+		copyAndPastMap := make(map[string]bool)
+
+		event := domains.Event{
+			WebsiteUrl:         e.WebsiteUrl,
+			SessionId:          e.SessionId,
+			EventType:          e.EventType,
+			TimeTaken:          0,
+			FormCompletionTime: 0,
+			CopyAndPaste:       copyAndPastMap,
+			ResizeFrom:         e.ResizeFrom,
+			ResizeTo:           e.ResizeTo,
+		}
+
+		s.mutex.Lock()
+		s.Events[event.SessionId] = event
+		s.mutex.Unlock()
+
+	}
+
+	log.Printf("Screen size Event triggered %+v", s.Events[e.SessionId])
+
+	return s.Events[e.SessionId], nil
+}

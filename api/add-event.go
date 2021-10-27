@@ -29,6 +29,8 @@ func (s *Server) AddEvent(w http.ResponseWriter, r *http.Request) {
 		s.svc.HandleCopyAndPasteEvent(*req)
 	case "timeTaken":
 		s.svc.HandleFormSubmissionEvent(*req)
+	case "screenResize":
+		s.svc.HandleScreenResizeEvent(*req)
 	}
 
 	w.WriteHeader(http.StatusOK)

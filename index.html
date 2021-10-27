@@ -75,7 +75,8 @@
 <script>
 
     const websiteUrl = window.location.href;
-    console.log(websiteUrl);
+    let startTime = null;
+    const sessionId = makeid(16);
 
     function makeid(length) {
         let result           = '';
@@ -88,12 +89,7 @@
         return result;
     }
 
-    const sessionId = makeid(16);
-
-
     function copyPasteTrigger(inputId) {
-        console.log("Sending copy paste event");
-
         const payload = {
             "eventType": "copyAndPaste",
             "websiteUrl": websiteUrl,
@@ -105,9 +101,36 @@
         sendRequest(payload);
     }
 
-    /*
-        * helper method send
-        */
+    function setStartTimestamp() {
+        if (startTime != null) {
+            return;
+        }
+        startTime = new Date();
+    }
+
+    const formSub = document.getElementById("form");
+    formSub.addEventListener('submit', logSubmit);
+   function logSubmit() {
+        console.log("form submitted")
+        const end = new Date();
+        const difference = end.getTime() - startTime.getTime();
+        let timeTaken = Math.round(difference/1000);
+
+        sendTimeTakenEvent(timeTaken);
+    }
+
+    function sendTimeTakenEvent(timeTaken) {
+        const data = {
+            "eventType": "timeTaken",
+            "websiteUrl": websiteUrl,
+            "sessionId": sessionId,
+            "timeTaken": timeTaken
+        }
+
+        sendRequest(data);
+    }
+
+
     function sendRequest(payload) {
 
         const stringPayload = JSON.stringify(payload);

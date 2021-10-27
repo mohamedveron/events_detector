@@ -35,7 +35,47 @@ func (s *Service)  HandleCopyAndPasteEvent(e domains.EventRequest) error{
 
 	}
 
-	log.Printf("Copy and paste Event triggered for sessionId %+v for input %+v", e.SessionId, e.FormId)
+	log.Printf("Copy and paste Event triggered %+v", s.Events[e.SessionId])
+
+	return nil
+}
+
+func (s *Service)  HandleFormSubmissionEvent(e domains.EventRequest) error{
+
+	copyAndPastMap := make(map[string]bool)
+
+	// check if the struct is already constructed
+	if _, ok := s.Events[e.SessionId]; ok {
+
+		copyAndPastMap = s.Events[e.SessionId].CopyAndPaste
+
+		s.mutex.Lock()
+
+		event := s.Events[e.SessionId]
+		event.FormCompletionTime = e.TimeTaken
+		s.Events[e.SessionId] = event
+		s.mutex.Unlock()
+
+	}else{
+
+		event := domains.Event{
+			WebsiteUrl:         e.WebsiteUrl,
+			SessionId:          e.SessionId,
+			EventType:          e.EventType,
+			TimeTaken:          0,
+			FormCompletionTime: e.TimeTaken,
+			CopyAndPaste:       copyAndPastMap,
+			ResizeFrom:         domains.Dimension{},
+			ResizeTo:           domains.Dimension{},
+		}
+
+		s.mutex.Lock()
+		s.Events[event.SessionId] = event
+		s.mutex.Unlock()
+
+	}
+
+	log.Printf("Form Submission Event triggered %+v", s.Events[e.SessionId])
 
 	return nil
 }

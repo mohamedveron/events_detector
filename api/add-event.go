@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/mohamedveron/events_detector/domains"
 	"io/ioutil"
-	"log"
 	"net/http"
 )
 
@@ -28,9 +27,9 @@ func (s *Server) AddEvent(w http.ResponseWriter, r *http.Request) {
 	switch eventType := req.EventType; eventType {
 	case "copyAndPaste":
 		s.svc.HandleCopyAndPasteEvent(*req)
+	case "timeTaken":
+		s.svc.HandleFormSubmissionEvent(*req)
 	}
-
-	log.Printf("Request received %+v", req)
 
 	w.WriteHeader(http.StatusOK)
 }

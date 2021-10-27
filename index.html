@@ -77,6 +77,17 @@
     const websiteUrl = window.location.href;
     let startTime = null;
     const sessionId = makeid(16);
+    let resized = false;
+    const initWidth = calcWidth();
+    const initHeight = calcHeight();
+
+    function calcWidth() {
+        return Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    }
+
+    function calcHeight() {
+        return Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+    }
 
     function makeid(length) {
         let result           = '';
@@ -126,6 +137,45 @@
             "sessionId": sessionId,
             "timeTaken": timeTaken
         }
+
+        sendRequest(data);
+    }
+
+    console.log("Initial Width=" + initWidth + ", Initial Hieght=" + initWidth);
+
+    window.addEventListener('resize', onWindowResize);
+    function onWindowResize() {
+        console.log("Window Resized");
+        if (resized) {
+            return;
+        }
+
+        if (!resized) {
+            resized = true;
+        }
+
+        const width = calcWidth();
+        const height = calcHeight();
+
+        sendResizeEvent(width, height);
+    }
+
+    function sendResizeEvent(width, height) {
+        console.log("Sending screen resize event");
+
+        const data = {
+            "eventType": "screenResize",
+            "websiteUrl": websiteUrl,
+            "sessionId": sessionId,
+            "resizeFrom": {
+                "width": initWidth.toString(),
+                "height": initHeight.toString()
+            },
+            "resizeTo": {
+                "width": width.toString(),
+                "height": height.toString()
+            }
+        };
 
         sendRequest(data);
     }

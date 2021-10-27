@@ -22,7 +22,7 @@ func main() {
 
 	server := api.NewServer(serviceLayer)
 
-	http.HandleFunc("/", foo)
+	http.HandleFunc("/", entry)
 	http.HandleFunc("/event", server.AddEvent)
 
 	fmt.Println("server starting on port 9090...")
@@ -33,7 +33,7 @@ func main() {
 
 }
 
-func foo(reswt http.ResponseWriter, req *http.Request) {
+func entry(reswt http.ResponseWriter, req *http.Request) {
 	tmpl.ExecuteTemplate(reswt, "index.html", nil)
 
 }

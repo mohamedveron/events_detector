@@ -88,17 +88,17 @@
         return result;
     }
 
-    const sessionId = makeid(8);
+    const sessionId = makeid(16);
 
 
-    function copyPasteTrigger(formId) {
+    function copyPasteTrigger(inputId) {
         console.log("Sending copy paste event");
 
         const payload = {
             "eventType": "copyAndPaste",
             "websiteUrl": websiteUrl,
             "sessionId": sessionId,
-            "formId": formId,
+            "formId": inputId,
             "pasted": true
         }
 
@@ -111,7 +111,7 @@
     function sendRequest(payload) {
 
         const stringPayload = JSON.stringify(payload);
-        const url = "/hello"
+        const url = "/event"
         fetch(url, {
             method: 'post',
             body: stringPayload,

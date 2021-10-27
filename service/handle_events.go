@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func (s *Service)  HandleCopyAndPasteEvent(e domains.EventRequest) error{
+func (s *Service)  HandleCopyAndPasteEvent(e domains.EventRequest) (domains.Event,error){
 
 	// check if the struct is already constructed
 	if _, ok := s.Events[e.SessionId]; ok {
@@ -37,10 +37,10 @@ func (s *Service)  HandleCopyAndPasteEvent(e domains.EventRequest) error{
 
 	log.Printf("Copy and paste Event triggered %+v", s.Events[e.SessionId])
 
-	return nil
+	return s.Events[e.SessionId], nil
 }
 
-func (s *Service)  HandleFormSubmissionEvent(e domains.EventRequest) error{
+func (s *Service)  HandleFormSubmissionEvent(e domains.EventRequest) (domains.Event,error){
 
 	copyAndPastMap := make(map[string]bool)
 
@@ -77,5 +77,5 @@ func (s *Service)  HandleFormSubmissionEvent(e domains.EventRequest) error{
 
 	log.Printf("Form Submission Event triggered %+v", s.Events[e.SessionId])
 
-	return nil
+	return s.Events[e.SessionId], nil
 }

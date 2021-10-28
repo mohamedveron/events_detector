@@ -1,9 +1,9 @@
 # events_detector
 
 ## Assumtions:
-I store the event for each struct in memory cached map to follow its construction until completion
+I store the event for each struct in a memory cached map to follow its construction until completion
 
-## Setup of the component
+## Setup of the app
 
 Must have golang installed version >= 12.0.0
 
@@ -16,7 +16,7 @@ make all
 
 
 
-## Test consume accounts data and make transferes by run
+## Test events
 
 ```bash
 make test

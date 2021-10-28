@@ -1,4 +1,4 @@
-FROM golang:1.14-alpine
+FROM golang:1.15-alpine
 
 RUN apk add --no-cache git
 RUN apk add --update make
@@ -9,14 +9,13 @@ WORKDIR /app
 
 # Copy and download dependency using go mod
 COPY go.mod .
-COPY go.sum .
 COPY Makefile .
 RUN go mod download
 
 # Copy the code into the container
 COPY . .
 
-RUN make all
+RUN make build
 
 # Export necessary port
 EXPOSE 9090

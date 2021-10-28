@@ -1,5 +1,7 @@
 # events_detector
 
+This app using go mod for dependancies management.
+
 ## Assumtions:
 I store the event for each struct in a memory cached map to follow its construction until completion
 
